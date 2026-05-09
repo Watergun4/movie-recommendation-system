@@ -94,5 +94,3 @@ print(f"Tags: {len(tags_clean)}")
 print(f"Edges: {len(edges)}")
 
 print("\nPreprocessing completed successfully.")
-
-print("Edges shape:", edges.shape)
