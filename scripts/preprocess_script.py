@@ -1,10 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
-# -------------------------
-# PATH SETUP
-# -------------------------
-
+# Path configuration
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BASE_DIR.parent
 
@@ -23,10 +20,7 @@ links = pd.read_csv(RAW_DATA_DIR / "links.csv")
 
 print("Datasets loaded successfully.\n")
 
-# -------------------------
-# VALIDATION
-# -------------------------
-
+# Validation 
 print("Running validation checks...\n")
 
 # Missing values
@@ -48,10 +42,7 @@ invalid_ratings = ratings[(ratings['rating'] < 0.5) | (ratings['rating'] > 5.0)]
 print("Invalid ratings count:", len(invalid_ratings))
 print()
 
-# -------------------------
-# CLEANING
-# -------------------------
-
+# Cleaning
 movies = movies.drop_duplicates()
 ratings = ratings.drop_duplicates()
 tags = tags.drop_duplicates()
@@ -70,10 +61,7 @@ edges = ratings_clean[['userId', 'movieId']]
 # Remove empty rows
 edges = edges.dropna()
 
-# -------------------------
-# SAVE FILES
-# -------------------------
-
+# Save Files
 print("Saving processed files...")
 
 movies_clean.to_csv(PROCESSED_DIR / "movies_clean.csv", index=False)
@@ -83,10 +71,7 @@ edges.to_csv(PROCESSED_DIR / "edges.csv", index=False)
 
 print("Files saved successfully.\n")
 
-# -------------------------
-# FINAL SUMMARY
-# -------------------------
-
+# Final Summary
 print("Final dataset summary:")
 print(f"Movies: {len(movies_clean)}")
 print(f"Ratings: {len(ratings_clean)}")
