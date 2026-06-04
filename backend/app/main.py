@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List, Optional
+from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
@@ -9,6 +10,13 @@ from . import models, schemas, recommender
 from .import_data import run_full_import
 
 app = FastAPI(title="Movie Recommendation API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # temporary homepage until frontend is finished
 @app.get("/")
@@ -43,17 +51,10 @@ def ensure_data_loaded():
     finally:
         db.close()
 
-@app.on_event("startup")
-def startup_event():
+#@app.on_event("startup")
+#def startup_event():
     # Don't let any error here crash the server
-    ensure_data_loaded()
-
-
-@app.on_event("startup")
-def startup_event():
-    # Don't let any error here crash the server
-    ensure_data_loaded()
-
+#    ensure_data_loaded()
 
 # ---------- USERS ----------
 
@@ -71,6 +72,11 @@ def create_or_get_user(payload: schemas.UserCreate,
         db.commit()
         db.refresh(user)
     return user
+
+#------ GET /USERS ------
+@app.get("/users")
+def get_users(db: Session = Depends(get_db)):
+    return db.query(models.User).limit(100).all()
 
 
 # ---------- MOVIES ----------
