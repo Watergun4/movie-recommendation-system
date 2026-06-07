@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Welcome — CineGraph</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+body{overflow-x:hidden;}
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:6rem 2rem 4rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,141,238,.12) 0%,transparent 70%);pointer-events:none;}
+.hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(232,201,122,.06) 0%,transparent 70%);top:-200px;left:50%;transform:translateX(-50%);pointer-events:none;}
+.hero-content{text-align:center;max-width:720px;position:relative;z-index:1;}
+.hero-eyebrow{font-family:var(--mono);font-size:.65rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:1.5rem;}
+.hero-h1{font-family:var(--serif);font-size:clamp(3rem,7vw,5.5rem);line-height:1.05;margin-bottom:1.2rem;font-style:italic;}
+.hero-h1 em{background:linear-gradient(135deg,#e8c97a,#9b72f5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:inherit;}
+.hero-sub{color:var(--muted);font-size:1rem;line-height:1.75;margin-bottom:2.5rem;max-width:540px;margin-left:auto;margin-right:auto;}
+.hero-ctas{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
+.btn-hero{padding:.9rem 2rem;border-radius:10px;font-family:var(--sans);font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-hero-p{background:var(--gold);color:#07070f;border:none;}
+.btn-hero-p:hover{background:var(--gold2);transform:translateY(-2px);}
+.btn-hero-s{background:none;border:1px solid var(--border2);color:var(--text);}
+.btn-hero-s:hover{border-color:var(--gold);transform:translateY(-2px);}
+
+/* ── FEATURES ── */
+.features{padding:6rem 2rem;border-top:1px solid var(--border);}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;max-width:1000px;margin:0 auto;}
+.feat{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:1.8rem;}
+.feat-icon{font-size:2rem;margin-bottom:1rem;}
+.feat-title{font-family:var(--serif);font-size:1.1rem;font-style:italic;margin-bottom:.5rem;}
+.feat-desc{color:var(--muted);font-size:.82rem;line-height:1.6;}
+
+/* ── AUTH MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--s1);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:420px;padding:2rem;animation:fadeUp .3s ease;}
+.modal-title{font-family:var(--serif);font-size:1.6rem;font-style:italic;margin-bottom:1.5rem;}
+.modal-switch{text-align:center;margin-top:1.2rem;color:var(--muted);font-size:.82rem;}
+.modal-switch a{color:var(--gold);cursor:pointer;text-decoration:underline;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:var(--s2);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{color:var(--text);}
+.divider{display:flex;align-items:center;gap:.8rem;margin:1.2rem 0;color:var(--muted);font-size:.75rem;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.demo-row{display:flex;gap:.5rem;flex-wrap:wrap;}
+.demo-pill{background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:.35rem .7rem;font-family:var(--mono);font-size:.68rem;color:var(--muted);cursor:pointer;transition:all .15s;}
+.demo-pill:hover{border-color:var(--gold);color:var(--gold);}
+.btn-full{width:100%;}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);color:var(--muted);font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-align:center;animation:bounce 2s ease infinite;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+</style>
+</head>
+<body>
+<nav id="nav-root"></nav>
+<div id="toast"></div>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Graph-Based Movie Intelligence</div>
+    <h1 class="hero-h1">Discover your next<br><em>obsession</em></h1>
+    <p class="hero-sub">CineGraph maps your taste across 9,742 films using collaborative filtering and graph algorithms — the same tech behind Netflix and Spotify.</p>
+    <div class="hero-ctas">
+      <button class="btn-hero btn-hero-p" onclick="openAuth('signup')">🎬 Get Started Free</button>
+      <button class="btn-hero btn-hero-s" onclick="openAuth('login')">Sign In</button>
+    </div>
+  </div>
+  <div class="hero-scroll">↓ scroll</div>
+</div>
+
+<div class="features">
+  <div style="text-align:center;margin-bottom:3rem">
+    <div class="eyebrow" style="margin-bottom:.8rem">How it works</div>
+    <h2 style="font-family:var(--serif);font-size:2rem;font-style:italic">Smart recommendations,<br>built on real data</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feat"><div class="feat-icon">🧠</div><div class="feat-title">Collaborative Filtering</div><div class="feat-desc">We find users with similar taste and surface what they loved — movies you'd never find on your own.</div></div>
+    <div class="feat"><div class="feat-icon">📊</div><div class="feat-title">Graph Analysis</div><div class="feat-desc">Your viewing history becomes a bipartite graph. We traverse it to find hidden connections between films.</div></div>
+    <div class="feat"><div class="feat-icon">🎯</div><div class="feat-title">Genre Fingerprint</div><div class="feat-desc">Pick your top genres and favourite films on signup. We build your taste profile instantly.</div></div>
+    <div class="feat"><div class="feat-icon">⭐</div><div class="feat-title">Rate & Review</div><div class="feat-desc">Every rating you give improves your recommendations. Like Letterboxd, but powered by graph algorithms.</div></div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeIfOutside(event)">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeAuth()">✕</button>
+    <div id="modal-login" style="display:none">
+      <div class="modal-title">Welcome back</div>
+      <div class="field"><label>Email</label><input type="email" id="li-email" placeholder="you@example.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="li-pass" placeholder="••••••"></div>
+      <button class="btn-primary btn-full" onclick="doLogin()">Sign In</button>
+      <div class="divider">or try a demo account</div>
+      <div class="demo-row" id="demo-row-login"></div>
+      <div class="modal-switch">New here? <a onclick="openAuth('signup')">Create an account</a></div>
+    </div>
+    <div id="modal-signup" style="display:none">
+      <div class="modal-title">Join CineGraph</div>
+      <div class="field"><label>Your name</label><input type="text" id="su-name" placeholder="Alex"></div>
+      <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="you@example.com"></div>
+      <div class="field"><label>Password (min 6 chars)</label><input type="password" id="su-pass" placeholder="••••••"></div>
+      <button class="btn-primary btn-full" onclick="doSignup()">Create Account</button>
+      <div class="modal-switch">Already have an account? <a onclick="openAuth('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+
+<script src="shared.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  buildNav('');
+  // demo accounts
+  var demos = [{name:'Film Buff',dbId:1},{name:'Indie Fan',dbId:7},{name:'Action Hero',dbId:15},{name:'Cinephile',dbId:22}];
+  var dr = document.getElementById('demo-row-login');
+  demos.forEach(function(d){
+    var p=document.createElement('div'); p.className='demo-pill';
+    p.textContent=d.name;
+    p.onclick=function(){ loginAs(d); };
+    dr.appendChild(p);
+  });
+  // auto-open if hash
+  if(location.hash==='#login') openAuth('login');
+  if(location.hash==='#signup') openAuth('signup');
+});
+
+function openAuth(mode){
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-login').style.display=mode==='login'?'block':'none';
+  document.getElementById('modal-signup').style.display=mode==='signup'?'block':'none';
+}
+function closeAuth(){ document.getElementById('modal-overlay').classList.remove('open'); }
+function closeIfOutside(e){ if(e.target===document.getElementById('modal-overlay')) closeAuth(); }
+
+function doLogin(){
+  var email=document.getElementById('li-email').value.trim();
+  var pass=document.getElementById('li-pass').value;
+  if(!validateEmail(email)){showFieldError('li-email','Enter a valid email');return;}
+  if(!validatePassword(pass)){showFieldError('li-pass','Password too short');return;}
+  // Check localStorage for registered users
+  var users=JSON.parse(localStorage.getItem('cg_users')||'[]');
+  var found=users.find(function(u){return u.email===email&&u.password===pass;});
+  if(!found){ showFieldError('li-pass','Incorrect email or password'); return; }
+  setUser(found); window.location.href='onboard.html';
+}
+
+function doSignup(){
+  var name=document.getElementById('su-name').value.trim();
+  var email=document.getElementById('su-email').value.trim();
+  var pass=document.getElementById('su-pass').value;
+  if(!validateName(name)){showFieldError('su-name','Name must be at least 2 characters');return;}
+  if(!validateEmail(email)){showFieldError('su-email','Enter a valid email');return;}
+  if(!validatePassword(pass)){showFieldError('su-pass','Password must be at least 6 characters');return;}
+  var users=JSON.parse(localStorage.getItem('cg_users')||'[]');
+  if(users.find(function(u){return u.email===email;})){showFieldError('su-email','Email already registered');return;}
+  var dbId = 1 + Math.floor(Math.random()*49); // assign random MovieLens user
+  var newUser={name:name,email:email,password:pass,dbId:dbId,isNew:true};
+  users.push(newUser); localStorage.setItem('cg_users',JSON.stringify(users));
+  setUser(newUser); window.location.href='onboard.html';
+}
+
+function loginAs(demo){
+  var u={name:demo.name,email:demo.name+'@demo.cg',dbId:demo.dbId,isDemo:true};
+  setUser(u); window.location.href='onboard.html';
+}
+
+// Clear field errors on input
+['li-email','li-pass','su-name','su-email','su-pass'].forEach(function(id){
+  var el=document.getElementById(id); if(el) el.addEventListener('input',function(){clearFieldError(id);});
+});
+</script>
+</body>
+</html>
